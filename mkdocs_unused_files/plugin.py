@@ -17,7 +17,7 @@ class UnusedFilesPlugin(BasePlugin):
         ('excluded_files', config_options.Type((str, list), default=[])),
         ('strict', config_options.Type(bool, default=False)),
         ('enabled', config_options.Type(bool, default=True)),
-        ('excluded_dirs', config_options.Type((str, list), default=[]),
+        ('excluded_dirs', config_options.Type((str, list), default=[])),
     )
 
     def _matches_type(self, str):
