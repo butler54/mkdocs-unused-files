@@ -59,7 +59,7 @@ class UnusedFilesPlugin(BasePlugin):
                     if entry in self.config['excluded_files']:
                         continue
                     if self.is_subdir(entry, self.config['excluded_dirs']):
-                        continues
+                        continue
                     self.file_list.append(entry)
 
     def on_page_content(self, html, page, config, files):
