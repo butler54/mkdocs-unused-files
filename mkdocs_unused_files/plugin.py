@@ -17,6 +17,7 @@ class UnusedFilesPlugin(BasePlugin):
         ('excluded_files', config_options.Type((str, list), default=[])),
         ('strict', config_options.Type(bool, default=False)),
         ('enabled', config_options.Type(bool, default=True)),
+        ('excluded_dirs', config_options.Type((str, list), default=[]),
     )
 
     def _matches_type(self, str):
@@ -39,6 +40,11 @@ class UnusedFilesPlugin(BasePlugin):
             self.config['enabled'] = False
             log.info("Unused-files plugin disabled while MkDocs is running in 'serve' mode.")
 
+    def is_subdir(self, path, directories):
+        for directory in directories:
+            if path.startswith(directory):
+                return True
+        return False
     def on_files(self, files, config):
         dir = os.path.join(config.docs_dir, self.config['dir'])
         # Get all files in directory
@@ -52,6 +58,8 @@ class UnusedFilesPlugin(BasePlugin):
                     entry = os.path.normpath(os.path.join(os.path.relpath(path, config.docs_dir), file))
                     if entry in self.config['excluded_files']:
                         continue
+                    if self.is_subdir(entry, self.config['excluded_dirs']):
+                        continues
                     self.file_list.append(entry)
 
     def on_page_content(self, html, page, config, files):
